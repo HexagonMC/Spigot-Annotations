@@ -1,0 +1,4 @@
+name: TestSpigotPlugin
+version: '1.0'
+description: Test for annotation parsing on spigot plugin
+main: TestSpigotInheritedPlugin.Inherited

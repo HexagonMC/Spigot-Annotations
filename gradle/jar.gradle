@@ -1,0 +1,14 @@
+
+jar {
+    from 'LICENSE'
+    
+    manifest {
+        attributes(
+            'Created-By': "${System.properties['java.version']} (${System.properties['java.vm.vendor']})",
+            
+            'Implementation-Title': project.name,
+            'Implementation-Version': project.version,
+            'Implementation-Vendor': project.organization
+        )
+    }
+}

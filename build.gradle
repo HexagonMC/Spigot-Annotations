@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'checkstyle'
+    id 'jacoco'
+    id "com.github.hierynomus.license" version "0.13.1"
+    id "com.jfrog.bintray" version "1.7.3"
+}
+
+archivesBaseName = project.name.toLowerCase()
+
+sourceCompatibility = "1.${version_java}"
+targetCompatibility = "1.${version_java}"
+
+repositories {
+    jcenter()
+    maven {
+        name 'Sonatype'
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+    maven {
+        name 'Spigot'
+        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+}
+
+dependencies {
+    compile group: 'com.google.guava', name: 'guava', version: version_guava
+    compile group: 'org.yaml', name: 'snakeyaml', version: version_snakeyaml
+    
+    testCompile "junit:junit:${version_junit}"
+    testCompile "com.google.testing.compile:compile-testing:${version_compiletesting}"
+    testCompile "com.google.truth:truth:${version_truth}"
+    testCompile "org.spigotmc:spigot-api:${version_spigot}-SNAPSHOT"
+    testCompile "net.md-5:bungeecord-api:${version_bungeecord}-SNAPSHOT"
+}
+
+apply from: 'gradle/parts.gradle'

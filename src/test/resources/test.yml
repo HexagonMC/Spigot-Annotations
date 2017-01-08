@@ -1,0 +1,19 @@
+name: Spigot
+version: 1.0.0-SNAPSHOT
+description: A test plugin meta.
+load: STARTUP
+authors:
+- Zartec
+- ghac
+website: http://hexagonmc.eu
+main: eu.hexagonmc.spigot.annotation.test.PluginMetaTest
+depend:
+- WorldEdit1
+- WorldEdit2
+softdepend:
+- WorldGuard1
+- WorldGuard2
+loadbefore:
+- Vault1
+- Vault2
+prefix: SPGT
