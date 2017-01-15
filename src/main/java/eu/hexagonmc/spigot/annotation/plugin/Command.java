@@ -20,30 +20,47 @@
  *     along with Spigot-Annotations.
  *     If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.hexagonmc.spigot.annotation.test;
+/**
+ * 
+ */
+package eu.hexagonmc.spigot.annotation.plugin;
 
-import eu.hexagonmc.spigot.annotation.meta.PluginYml;
-import org.junit.Test;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-public class BaseTest {
+@Documented
+@Retention(RUNTIME)
+@Target({})
+public @interface Command {
 
-    @Test(expected = InvocationTargetException.class)
-    public void testPluginYmlUtilityClass() throws Exception {
-        Constructor<PluginYml> constructor = PluginYml.class.getDeclaredConstructor();
-        constructor.setAccessible(true);
-        constructor.newInstance();
-    }
+    /**
+     * Name of this command.
+     * 
+     * @return the name
+     */
+    String name();
 
-    @Test
-    public void testPluginYmlLoad() throws IOException {
-        File empty = new File("empty.yml");
-        empty.createNewFile();
-        PluginYml.read(empty.toPath());
-        empty.delete();
-    }
+    /**
+     * List of alias command names for this command.
+     * 
+     * @return the alias list
+     */
+    String[] aliases() default {};
+
+    /**
+     * The permission required to use this command.
+     * 
+     * @return the permission
+     */
+    String permission() default "";
+
+    /**
+     * The usage message printed if this command is used wrong.
+     * 
+     * @return the usage message
+     */
+    String usage() default "";
 }

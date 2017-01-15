@@ -33,8 +33,12 @@ dependencies {
     testCompile "junit:junit:${version_junit}"
     testCompile "com.google.testing.compile:compile-testing:${version_compiletesting}"
     testCompile "com.google.truth:truth:${version_truth}"
-    testCompile "org.spigotmc:spigot-api:${version_spigot}-SNAPSHOT"
-    testCompile "net.md-5:bungeecord-api:${version_bungeecord}-SNAPSHOT"
+    testCompile("org.spigotmc:spigot-api:${version_spigot}-SNAPSHOT") {
+        exclude group: "org.yaml"
+    }
+    testCompile("net.md-5:bungeecord-api:${version_bungeecord}-SNAPSHOT") {
+        exclude group: "org.yaml"
+    }
 }
 
 apply from: 'gradle/parts.gradle'

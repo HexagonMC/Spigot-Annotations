@@ -20,10 +20,28 @@
  *     along with Spigot-Annotations.
  *     If not, see <http://www.gnu.org/licenses/>.
  */
-import eu.hexagonmc.spigot.annotation.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
+package eu.hexagonmc.spigot.annotation.meta;
 
-@Plugin(name = "TestSpigotPlugin", version = "1.0", description = "Test for annotation parsing on spigot plugin")
-public class TestSpigotPlugin extends JavaPlugin {
-
+/**
+ * Represents the possible default values for permissions.
+ */
+public enum PermissionDefault {
+    /**
+     * If not specially defined the player will have this permission.
+     */
+    TRUE,
+    /**
+     * If not specially defined the player will not have this permission.
+     */
+    FALSE,
+    /**
+     * If not specially defined the player will have this permission if he is
+     * op.
+     */
+    OP,
+    /**
+     * If not specially defined the player will not have this permission if he
+     * is op.
+     */
+    NO_OP
 }

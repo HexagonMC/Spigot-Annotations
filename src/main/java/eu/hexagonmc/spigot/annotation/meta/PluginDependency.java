@@ -22,7 +22,11 @@
  */
 package eu.hexagonmc.spigot.annotation.meta;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.google.common.base.MoreObjects;
+import eu.hexagonmc.spigot.annotation.plugin.Dependency;
 
 /**
  * Represents a plugin dependency.
@@ -38,25 +42,37 @@ import com.google.common.base.MoreObjects;
 public class PluginDependency {
 
     /**
+     * Creates dependency from an annotation. Parses the data stored in the
+     * annotation.
+     * 
+     * @param annotation The annotation to parse for data
+     * @return The new dependency
+     * @see PluginDependency
+     */
+    public static PluginDependency from(Dependency annotation) {
+        PluginDependency dep = new PluginDependency(annotation.name());
+        dep.setType(annotation.type());
+        return dep;
+    }
+
+    /**
      * The name of this dependency.
      */
-    private final String _name;
+    private String _name;
     /**
      * The type of this dependency.
      * 
      * @see DependencyType
      */
-    private final DependencyType _type;
+    private DependencyType _type;
 
     /**
-     * Creates a new dependency from a plugin name and a type.
+     * Creates a new dependency from a plugin name.
      * 
      * @param name The name of the plugin to depend on
-     * @param type The type of the dependency
      */
-    public PluginDependency(String name, DependencyType type) {
-        _name = name;
-        _type = type;
+    public PluginDependency(String name) {
+        setName(name);
     }
 
     /**
@@ -69,6 +85,17 @@ public class PluginDependency {
     }
 
     /**
+     * Sets the name of this dependency.
+     * 
+     * @param name The name to set
+     */
+    public void setName(String name) {
+        checkNotNull(name, "name");
+        checkArgument(!name.isEmpty(), "Name should not be empty!");
+        _name = name;
+    }
+
+    /**
      * The type of this dependency.
      * 
      * @return The type
@@ -78,11 +105,20 @@ public class PluginDependency {
         return _type;
     }
 
+    /**
+     * Sets the type of this dependency.
+     * 
+     * @param type The type to set
+     */
+    public void setType(DependencyType type) {
+        _type = type;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(getClass())
                 .add("name", _name)
-                .add("type", _type.name())
+                .add("type", _type != null ? _type.name() : null)
                 .toString();
     }
 
@@ -94,7 +130,7 @@ public class PluginDependency {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (_name == null ? 0 : _name.hashCode());
+        result = prime * result + _name.hashCode();
         result = prime * result + (_type == null ? 0 : _type.hashCode());
         return result;
     }
@@ -115,14 +151,14 @@ public class PluginDependency {
             return false;
         }
         PluginDependency other = (PluginDependency) obj;
-        if (_name == null) {
-            if (other._name != null) {
-                return false;
-            }
-        } else if (!_name.equals(other._name)) {
+        if (!_name.equals(other._name)) {
             return false;
         }
-        if (_type != other._type) {
+        if (_type == null) {
+            if (other._type != null) {
+                return false;
+            }
+        } else if (_type != other._type) {
             return false;
         }
         return true;

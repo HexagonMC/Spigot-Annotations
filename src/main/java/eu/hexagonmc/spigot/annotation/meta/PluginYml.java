@@ -41,6 +41,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,16 +85,21 @@ public class PluginYml {
     static {
         DumperOptions options = new DumperOptions();
         options.setDefaultFlowStyle(FlowStyle.BLOCK);
+        options.setPrettyFlow(true);
+        options.setSplitLines(false);
+        options.setIndent(2);
+        options.setIndicatorIndent(2);
         _adapter = new Yaml(options);
     }
 
     /**
-     * Utility class. Can not be instanciated.
+     * Throw exception if used. Utility classes should not be instanced.
      * 
-     * @throws RuntimeException if someone tries to create a instance.
+     * @throws RuntimeException if someone tries to call this constructor this
+     *         class.
      */
-    private PluginYml() {
-        throw new RuntimeException("Can not instanciate a utility class");
+    public PluginYml() {
+        throw new RuntimeException("Utility class should not be instanced");
     }
 
     /**
@@ -146,26 +152,84 @@ public class PluginYml {
             if (map.containsKey("main") && map.get("main") instanceof String) {
                 meta.setMain((String) map.get("main"));
             }
-            if (map.containsKey("database") && map.get("database") instanceof String) {
+            if (map.containsKey("database") && map.get("database") instanceof Boolean) {
                 meta.setDatabase((Boolean) map.get("database"));
             }
             if (map.containsKey("depend") && map.get("depend") instanceof List) {
                 ((List<String>) map.get("depend")).forEach(depend -> {
-                    meta.addDependency(new PluginDependency(depend, DependencyType.DEPEND));
+                    PluginDependency dep = new PluginDependency(depend);
+                    dep.setType(DependencyType.DEPEND);
+                    meta.addDependency(dep);
                 });
             }
             if (map.containsKey("softdepend") && map.get("softdepend") instanceof List) {
                 ((List<String>) map.get("softdepend")).forEach(depend -> {
-                    meta.addDependency(new PluginDependency(depend, DependencyType.SOFTDEPEND));
+                    PluginDependency dep = new PluginDependency(depend);
+                    dep.setType(DependencyType.SOFTDEPEND);
+                    meta.addDependency(dep);
                 });
             }
             if (map.containsKey("loadbefore") && map.get("loadbefore") instanceof List) {
                 ((List<String>) map.get("loadbefore")).forEach(depend -> {
-                    meta.addDependency(new PluginDependency(depend, DependencyType.LOADBEFORE));
+                    PluginDependency dep = new PluginDependency(depend);
+                    dep.setType(DependencyType.LOADBEFORE);
+                    meta.addDependency(dep);
                 });
             }
             if (map.containsKey("prefix") && map.get("prefix") instanceof String) {
                 meta.setPrefix((String) map.get("prefix"));
+            }
+            if (map.containsKey("commands") && map.get("commands") instanceof Map) {
+                Map<String, Object> commands = (Map<String, Object>) map.get("commands");
+                commands.forEach((name, values) -> {
+                    PluginCommand command = new PluginCommand(name);
+                    if (values != null && values instanceof Map) {
+                        Map<String, Object> valueMap = (Map<String, Object>) values;
+                        if (valueMap.containsKey("description") && valueMap.get("description") instanceof String) {
+                            command.setDescription((String) valueMap.get("description"));
+                        }
+                        if (valueMap.containsKey("aliases") && valueMap.get("aliases") instanceof String) {
+                            command.addAlias((String) valueMap.get("aliases"));
+                        }
+                        if (valueMap.containsKey("aliases") && valueMap.get("aliases") instanceof List) {
+                            ((List<String>) valueMap.get("aliases")).forEach(alias -> {
+                                command.addAlias(alias);
+                            });
+                        }
+                        if (valueMap.containsKey("permission") && valueMap.get("permission") instanceof String) {
+                            command.setPermission((String) valueMap.get("permission"));
+                        }
+                        if (valueMap.containsKey("usage") && valueMap.get("usage") instanceof String) {
+                            command.setUsage((String) valueMap.get("usage"));
+                        }
+                    }
+                    meta.addCommand(command);
+                });
+            }
+            if (map.containsKey("permissions") && map.get("permissions") instanceof Map) {
+                Map<String, Object> permissions = (Map<String, Object>) map.get("permissions");
+                permissions.forEach((name, values) -> {
+                    PluginPermission perm = new PluginPermission(name);
+                    if (values != null && values instanceof Map) {
+                        Map<String, Object> valueMap = (Map<String, Object>) values;
+                        if (valueMap.containsKey("description") && valueMap.get("description") instanceof String) {
+                            perm.setDescription((String) valueMap.get("description"));
+                        }
+                        if (valueMap.containsKey("default") && valueMap.get("default") instanceof String) {
+                            PermissionDefault def = PermissionDefault.valueOf(((String) valueMap.get("default")).toUpperCase());
+                            perm.setDefault(def);
+                        }
+                        if (valueMap.containsKey("children") && valueMap.get("children") instanceof Map) {
+                            Map<String, Boolean> childMap = (Map<String, Boolean>) valueMap.get("children");
+                            childMap.forEach((node, value) -> {
+                                if (value != null) {
+                                    perm.addChild(node, value);
+                                }
+                            });
+                        }
+                    }
+                    meta.addPermission(perm);
+                });
             }
             return meta;
         }
@@ -240,6 +304,8 @@ public class PluginYml {
                     case LOADBEFORE:
                         loadbefore.add(dep.getName());
                         break;
+                    default:
+                        continue;
                 }
             }
             metaMap.put("depend", depend);
@@ -248,6 +314,43 @@ public class PluginYml {
         }
         if (!Strings.isNullOrEmpty(meta.getPrefix())) {
             metaMap.put("prefix", meta.getPrefix());
+        }
+        if (!meta.getCommands().isEmpty()) {
+            Map<String, Object> commands = new HashMap<>();
+            meta.getCommands().forEach(cmd -> {
+                Map<String, Object> valueMap = new HashMap<>();
+                if (!Strings.isNullOrEmpty(cmd.getDescription())) {
+                    valueMap.put("description", cmd.getDescription());
+                }
+                if (!cmd.getAliases().isEmpty()) {
+                    valueMap.put("aliases", new ArrayList<>(cmd.getAliases()));
+                }
+                if (!Strings.isNullOrEmpty(cmd.getPermission())) {
+                    valueMap.put("permission", cmd.getPermission());
+                }
+                if (!Strings.isNullOrEmpty(cmd.getUsage())) {
+                    valueMap.put("usage", cmd.getUsage());
+                }
+                commands.put(cmd.getName(), valueMap);
+            });
+            metaMap.put("commands", commands);
+        }
+        if (!meta.getPermissions().isEmpty()) {
+            Map<String, Object> permissions = new HashMap<>();
+            meta.getPermissions().forEach(perm -> {
+                Map<String, Object> valueMap = new HashMap<>();
+                if (!Strings.isNullOrEmpty(perm.getDescription())) {
+                    valueMap.put("description", perm.getDescription());
+                }
+                if (perm.getDefault() != null) {
+                    valueMap.put("default", perm.getDefault().name().toLowerCase());
+                }
+                if (!perm.getChilds().isEmpty()) {
+                    valueMap.put("children", new HashMap<>(perm.getChilds()));
+                }
+                permissions.put(perm.getName(), valueMap);
+            });
+            metaMap.put("permissions", permissions);
         }
         writer.append("# Auto-generated yaml file, generated at ").append(DATE_FORMAT.format(new Date())).append(" by ")
                 .append(AnnotationProcessor.class.getName()).append("\n\n");

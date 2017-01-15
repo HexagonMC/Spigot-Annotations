@@ -27,13 +27,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
+import eu.hexagonmc.spigot.annotation.plugin.Command;
 import eu.hexagonmc.spigot.annotation.plugin.Dependency;
+import eu.hexagonmc.spigot.annotation.plugin.Permission;
 import eu.hexagonmc.spigot.annotation.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -77,9 +80,9 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
         }
         meta.setMain(main);
         for (Dependency dep : annotation.dependencies()) {
-            meta.addDependency(new PluginDependency(dep.name(), dep.type()));
+            meta.addDependency(PluginDependency.from(dep));
         }
-        if (annotation.spigot() != null) {
+        if (annotation.spigot().set()) {
             if (annotation.spigot().load() != LoadOn.POSTWORLD) {
                 meta.setLoadOn(annotation.spigot().load());
             }
@@ -95,7 +98,13 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
             if (!Strings.isNullOrEmpty(annotation.spigot().prefix())) {
                 meta.setPrefix(annotation.spigot().prefix());
             }
-        } else if (annotation.bungee() != null) {
+            for (Command command : annotation.spigot().commands()) {
+                meta.addCommand(PluginCommand.from(command));
+            }
+            for (Permission permission : annotation.spigot().permissions()) {
+                meta.addPermission(PluginPermission.from(permission));
+            }
+        } else if (annotation.bungee().set()) {
             if (!Strings.isNullOrEmpty(annotation.bungee().author())) {
                 meta.addAuthor(annotation.bungee().author());
             }
@@ -139,11 +148,19 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
     /**
      * The depednecies of this plugin.
      */
-    private final Map<String, PluginDependency> _dependencies = new HashMap<>();
+    private final Map<String, PluginDependency> _dependencies = new LinkedHashMap<>();
     /**
      * The log prefix of this plugin.
      */
     private String _prefix;
+    /**
+     * The commands registered with this plugin.
+     */
+    private final Map<String, PluginCommand> _commands = new HashMap<>();
+    /**
+     * The permissions registered with this plugin.
+     */
+    private final Map<String, PluginPermission> _permissions = new HashMap<>();
 
     /**
      * Creates a new metadata for a plugin with the given name.
@@ -151,7 +168,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
      * @param name The name of the plugin
      */
     public PluginMetadata(String name) {
-        setName(name.isEmpty() ? null : name);
+        setName(name);
     }
 
     /**
@@ -194,7 +211,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
     public void addDependency(PluginDependency dependency) {
         String name = dependency.getName();
         checkNotNull(name, "Dependency name is null.");
-        checkArgument(!_dependencies.containsKey(name), "Duplicate dependency with plugin ID: " + name);
+        checkArgument(!_dependencies.containsKey(name), "Duplicate dependency with plugin name: " + name);
         _dependencies.put(name, dependency);
     }
 
@@ -232,13 +249,103 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
     }
 
     /**
+     * Adds a command to this plugin.
+     * 
+     * @param command The command to add
+     * @see PluginCommand
+     */
+    public void addCommand(PluginCommand command) {
+        String name = command.getName();
+        checkNotNull(name, "Command name is null.");
+        checkArgument(!_commands.containsKey(name), "Duplicate command with command name: " + name);
+        _commands.put(name, command);
+    }
+
+    /**
+     * Gets all commands of this plugin.
+     * 
+     * @return The command
+     * @see PluginCommand
+     * @see Collection
+     */
+    public Collection<PluginCommand> getCommands() {
+        return _commands.values();
+    }
+
+    /**
+     * Replaces or inserts a command of this plugin.
+     * 
+     * @param command The command to replace or add
+     * @return The old command if replaced or null
+     * @see PluginCommand
+     */
+    public PluginCommand replaceCommand(PluginCommand command) {
+        return _commands.put(command.getName(), command);
+    }
+
+    /**
+     * Removes a command from this pugin.
+     * 
+     * @param command The command to remove
+     * @return true if the command was removed false if it did not exist
+     * @see PluginCommand
+     */
+    public boolean removeCommand(PluginCommand command) {
+        return _commands.remove(command.getName()) != null;
+    }
+
+    /**
+     * Adds a permission to this plugin.
+     * 
+     * @param permission The permission to add
+     * @see PluginPermission
+     */
+    public void addPermission(PluginPermission permission) {
+        String name = permission.getName();
+        checkNotNull(name, "Permission name is null.");
+        checkArgument(!_permissions.containsKey(name), "Duplicate permission with permission name: " + name);
+        _permissions.put(name, permission);
+    }
+
+    /**
+     * Gets all permissions of this plugin.
+     * 
+     * @return The permissions
+     * @see PluginPermission
+     * @see Collection
+     */
+    public Collection<PluginPermission> getPermissions() {
+        return _permissions.values();
+    }
+
+    /**
+     * Replaces or inserts a permission of this plugin.
+     * 
+     * @param permission The permission to replace or add
+     * @return The old permission if replaced or null
+     * @see PluginPermission
+     */
+    public PluginPermission replacePermission(PluginPermission permission) {
+        return _permissions.put(permission.getName(), permission);
+    }
+
+    /**
+     * Removes a permission from this pugin.
+     * 
+     * @param permission The permission to remove
+     * @return true if the permission was removed false if it did not exist
+     * @see PluginPermission
+     */
+    public boolean removePermission(PluginPermission permission) {
+        return _permissions.remove(permission.getName()) != null;
+    }
+
+    /**
      * Merges another metadata into this one.
      */
     @Override
     public void accept(PluginMetadata other) {
-        if (other._name != null) {
-            _name = other._name;
-        }
+        _name = other._name;
 
         if (other._version != null) {
             _version = other._version;
@@ -271,6 +378,10 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
         other.getDependencies().forEach(this::replaceDependency);
 
+        other.getCommands().forEach(this::replaceCommand);
+
+        other.getPermissions().forEach(this::replacePermission);
+
         if (other._prefix != null) {
             _prefix = other._prefix;
         }
@@ -283,6 +394,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
      */
     public void setName(String name) {
         checkNotNull(name);
+        checkArgument(!name.isEmpty(), "Name should not be empty!");
         _name = name;
     }
 
@@ -430,12 +542,14 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
                 .add("name", _name)
                 .add("version", _version)
                 .add("description", _description)
-                .add("loadOn", _loadOn.name())
+                .add("loadOn", _loadOn != null ? _loadOn.name() : null)
                 .add("authors", Arrays.toString(_authors.toArray(new String[_authors.size()])))
                 .add("website", _website)
                 .add("main", _main)
                 .add("database", _database)
                 .add("dependencies", _dependencies.toString())
+                .add("commands", _commands.toString())
+                .add("permissions", _permissions.toString())
                 .add("prefix", _prefix)
                 .toString();
     }
@@ -448,13 +562,15 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (_authors == null ? 0 : _authors.hashCode());
+        result = prime * result + _authors.hashCode();
         result = prime * result + (_database == null ? 0 : _database.hashCode());
-        result = prime * result + (_dependencies == null ? 0 : _dependencies.hashCode());
+        result = prime * result + _dependencies.hashCode();
+        result = prime * result + _commands.hashCode();
+        result = prime * result + _permissions.hashCode();
         result = prime * result + (_description == null ? 0 : _description.hashCode());
         result = prime * result + (_loadOn == null ? 0 : _loadOn.hashCode());
         result = prime * result + (_main == null ? 0 : _main.hashCode());
-        result = prime * result + (_name == null ? 0 : _name.hashCode());
+        result = prime * result + _name.hashCode();
         result = prime * result + (_prefix == null ? 0 : _prefix.hashCode());
         result = prime * result + (_version == null ? 0 : _version.hashCode());
         result = prime * result + (_website == null ? 0 : _website.hashCode());
@@ -477,11 +593,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
             return false;
         }
         PluginMetadata other = (PluginMetadata) obj;
-        if (_authors == null) {
-            if (other._authors != null) {
-                return false;
-            }
-        } else if (!_authors.equals(other._authors)) {
+        if (!_authors.equals(other._authors)) {
             return false;
         }
         if (_database == null) {
@@ -491,11 +603,13 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
         } else if (!_database.equals(other._database)) {
             return false;
         }
-        if (_dependencies == null) {
-            if (other._dependencies != null) {
-                return false;
-            }
-        } else if (!_dependencies.equals(other._dependencies)) {
+        if (!_dependencies.equals(other._dependencies)) {
+            return false;
+        }
+        if (!_commands.equals(other._commands)) {
+            return false;
+        }
+        if (!_permissions.equals(other._permissions)) {
             return false;
         }
         if (_description == null) {
@@ -505,7 +619,11 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
         } else if (!_description.equals(other._description)) {
             return false;
         }
-        if (_loadOn != other._loadOn) {
+        if (_loadOn == null) {
+            if (other._loadOn != null) {
+                return false;
+            }
+        } else if (_loadOn != other._loadOn) {
             return false;
         }
         if (_main == null) {
@@ -515,11 +633,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
         } else if (!_main.equals(other._main)) {
             return false;
         }
-        if (_name == null) {
-            if (other._name != null) {
-                return false;
-            }
-        } else if (!_name.equals(other._name)) {
+        if (!_name.equals(other._name)) {
             return false;
         }
         if (_prefix == null) {

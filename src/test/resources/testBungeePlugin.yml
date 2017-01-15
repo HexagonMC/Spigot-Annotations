@@ -1,4 +1,0 @@
-name: TestBungeePlugin
-version: '1.0'
-description: Test for annotation parsing on bungee plugin
-main: TestBungeePlugin

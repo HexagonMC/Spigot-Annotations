@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
  * 
  * </p> Each attribute in this annotation is mapped to an key in tha yaml file.
  * 
- * </p> Because this annotaion can be applied to Spigot and BungeeCord plugins
+ * </p> Because this annotation can be applied to Spigot and BungeeCord plugins
  * there are the extension named {@link Plugin#spigot()} and
  * {@link Plugin#bungee()}. To apply specific values for eg. a Spigot plugin.
  * 
@@ -55,7 +55,7 @@ import java.lang.annotation.Target;
  * {@code org.bukkit.plugin.java.JavaPlugin} or
  * {@code net.md_5.bungee.api.plugin.Plugin}.
  * 
- * </p> If you programm a plugin that is usable in Spigot and BungeeCord simply
+ * </p> If you code a plugin that is usable in Spigot and BungeeCord simply
  * annotate both main classes with @Plugin.
  * 
  * @see Spigot
@@ -148,6 +148,20 @@ public @interface Plugin {
          * @return The logging prefix of the plugin
          */
         String prefix() default "";
+
+        /**
+         * List of commands to register with this plugin.
+         * 
+         * @return the list of commands
+         */
+        Command[] commands() default {};
+
+        /**
+         * List of permissions to register with this plugin.
+         * 
+         * @return the list of permissions
+         */
+        Permission[] permissions() default {};
     }
 
     /**

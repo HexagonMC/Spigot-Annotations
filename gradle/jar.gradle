@@ -1,10 +1,22 @@
 
+compileJava {
+    options.compilerArgs += ["-proc:none"]
+}
+compileTestJava {
+    options.compilerArgs += ["-proc:none"]
+}
+
 jar {
     from 'LICENSE'
     
     manifest {
         attributes(
             'Created-By': "${System.properties['java.version']} (${System.properties['java.vm.vendor']})",
+            'Created-At': new Date(),
+            
+            'Description': project.description,
+            'Url': project.organization_url,
+            'Developers': project.developers,
             
             'Implementation-Title': project.name,
             'Implementation-Version': project.version,

@@ -139,7 +139,7 @@ public class AnnotationProcessor extends AbstractProcessor {
                         _metaSpigot.accept(meta);
                     }
                 } catch (IOException e) {
-                    throw new RuntimeException("Failed to read extra plugin metadata from " + path, e);
+                    getMessager().printMessage(ERROR, "Failed to read extra plugin metadata from " + path + ": " + e.getMessage());
                 }
             }
         }
@@ -156,7 +156,7 @@ public class AnnotationProcessor extends AbstractProcessor {
                         _metaBungee.accept(meta);
                     }
                 } catch (IOException e) {
-                    throw new RuntimeException("Failed to read extra plugin metadata from " + path, e);
+                    getMessager().printMessage(ERROR, "Failed to read extra plugin metadata from " + path + ": " + e.getMessage());
                 }
             }
         }
@@ -240,6 +240,7 @@ public class AnnotationProcessor extends AbstractProcessor {
             elements.forEach(element -> classes.add(element.getSimpleName().toString()));
             getMessager().printMessage(ERROR,
                     "More than two classes annotated with @Plugin: " + Arrays.toString(classes.toArray(new String[classes.size()])));
+            return false;
         }
 
         if (elements.size() == 2) {

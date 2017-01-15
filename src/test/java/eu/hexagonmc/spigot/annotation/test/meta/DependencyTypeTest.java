@@ -20,9 +20,26 @@
  *     along with Spigot-Annotations.
  *     If not, see <http://www.gnu.org/licenses/>.
  */
-import eu.hexagonmc.spigot.annotation.plugin.Plugin;
+package eu.hexagonmc.spigot.annotation.test.meta;
 
-@Plugin(name = "TestMissingInheritance", version = "1.0", description = "Test for annotation parsing with missing inheritance")
-public class TestMissingInheritancePlugin {
+import static com.google.common.truth.Truth.assertThat;
 
+import eu.hexagonmc.spigot.annotation.meta.DependencyType;
+import org.junit.Test;
+
+public class DependencyTypeTest {
+
+    @Test
+    public void testFromString() {
+        String value;
+
+        value = "DEPEND";
+        assertThat(DependencyType.valueOf(value)).isEquivalentAccordingToCompareTo(DependencyType.DEPEND);
+
+        value = "SOFTDEPEND";
+        assertThat(DependencyType.valueOf(value)).isEquivalentAccordingToCompareTo(DependencyType.SOFTDEPEND);
+
+        value = "LOADBEFORE";
+        assertThat(DependencyType.valueOf(value)).isEquivalentAccordingToCompareTo(DependencyType.LOADBEFORE);
+    }
 }

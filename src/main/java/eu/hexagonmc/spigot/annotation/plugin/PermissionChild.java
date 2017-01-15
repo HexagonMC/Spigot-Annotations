@@ -20,18 +20,31 @@
  *     along with Spigot-Annotations.
  *     If not, see <http://www.gnu.org/licenses/>.
  */
-import eu.hexagonmc.spigot.annotation.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
+package eu.hexagonmc.spigot.annotation.plugin;
 
-public class TestSpigotBungeePlugin extends JavaPlugin {
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-    @Plugin(name = "TestSpigotPlugin", version = "1.0", description = "Test for annotation parsing on spigot plugin")
-    public class Spigot extends JavaPlugin {
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-    }
+@Documented
+@Retention(RUNTIME)
+@Target({})
+public @interface PermissionChild {
 
-    @Plugin(name = "TestBungeePlugin", version = "1.0", description = "Test for annotation parsing on bungee plugin")
-    static class Bungee extends net.md_5.bungee.api.plugin.Plugin {
+    /**
+     * The name of this child permission.
+     * 
+     * @return the name
+     */
+    String name();
 
-    }
+    /**
+     * True to inherit parent permission. False to inherit inversed parent
+     * permission.
+     * 
+     * @return the value
+     */
+    boolean value();
 }

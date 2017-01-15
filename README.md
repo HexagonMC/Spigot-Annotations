@@ -5,7 +5,7 @@ Annotation processor for Spigot- and BungeeCord-Plugins
 [![Build Status](https://travis-ci.org/HexagonMC/Spigot-Annotations.svg?branch=master)](https://travis-ci.org/HexagonMC/Spigot-Annotations)
 [ ![Download](https://api.bintray.com/packages/hexagonmc/Spigot/Spigot-Annotations/images/download.svg) ](https://bintray.com/hexagonmc/Spigot/Spigot-Annotations/_latestVersion)
 [![codecov](https://codecov.io/gh/HexagonMC/Spigot-Annotations/branch/master/graph/badge.svg)](https://codecov.io/gh/HexagonMC/Spigot-Annotations)
-[![Maven Central](https://img.shields.io/maven-central/v/eu.hexagonmc/spigot-annotations.svg)]()
+[![Maven Central](https://img.shields.io/maven-central/v/eu.hexagonmc/spigot-annotations.svg)](https://repo1.maven.org/maven2/eu/hexagonmc/spigot-annotations/)
 
 This dependency adds an annotation preprocessor to your project which generates the `plugin.yml` and `bungee.yml` for you.
 

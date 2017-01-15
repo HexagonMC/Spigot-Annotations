@@ -123,7 +123,7 @@ public class MetadataProcessor {
                     error("Dependency name should not be empty.", "dependencies.name");
                     continue;
                 }
-                _meta.replaceDependency(new PluginDependency(dependencyName, dependency.type()));
+                _meta.replaceDependency(PluginDependency.from(dependency));
             }
         }
 
@@ -133,7 +133,7 @@ public class MetadataProcessor {
             LoadOn loadOn = _annotation.spigot().load();
             if (_meta.getLoadOn() == null && loadOn != LoadOn.POSTWORLD) {
                 _meta.setLoadOn(loadOn);
-            } else if (meta.getLoadOn() != null && _meta.getLoadOn() != loadOn) {
+            } else if (_meta.getLoadOn() != null && _meta.getLoadOn() != loadOn) {
                 _meta.setLoadOn(loadOn);
             }
 
@@ -171,7 +171,7 @@ public class MetadataProcessor {
             // Parse spigot prefix
             value = _annotation.spigot().prefix();
             if (Strings.isNullOrEmpty(value)) {
-                if (Strings.isNullOrEmpty(meta.getPrefix())) {
+                if (Strings.isNullOrEmpty(_meta.getPrefix())) {
                     warning("Missing plugin prefix");
                 }
             } else {
@@ -186,8 +186,8 @@ public class MetadataProcessor {
             if (Strings.isNullOrEmpty(value)) {
                 error("Empty author is not allowed", "bungee.author");
             } else {
-                meta.getAuthors().clear();
-                meta.addAuthor(value);
+                _meta.getAuthors().clear();
+                _meta.addAuthor(value);
             }
         }
         _processed = true;
