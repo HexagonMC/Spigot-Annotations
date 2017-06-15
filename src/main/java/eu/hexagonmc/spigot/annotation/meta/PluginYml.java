@@ -27,6 +27,9 @@ import eu.hexagonmc.spigot.annotation.AnnotationProcessor;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.introspector.PropertyUtils;
+import org.yaml.snakeyaml.representer.Representer;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -88,8 +91,12 @@ public class PluginYml {
         options.setPrettyFlow(true);
         options.setSplitLines(false);
         options.setIndent(2);
-        options.setIndicatorIndent(2);
-        _adapter = new Yaml(options);
+        options.setIndicatorIndent(0);
+        Constructor yamlConstructor = new Constructor();
+        PropertyUtils propertyUtils = yamlConstructor.getPropertyUtils();
+        propertyUtils.setSkipMissingProperties(true);
+        yamlConstructor.setPropertyUtils(propertyUtils);
+        _adapter = new Yaml(yamlConstructor, new Representer(), options);
     }
 
     /**
