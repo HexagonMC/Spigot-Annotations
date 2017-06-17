@@ -205,7 +205,7 @@ public class MetadataProcessor {
                 try {
                     Files.delete(output);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    // ignore
                 }
             }
         }
