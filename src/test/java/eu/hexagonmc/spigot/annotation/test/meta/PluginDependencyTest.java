@@ -1,7 +1,7 @@
 /**
  *
- * Copyright (C) 2017  HexagonMc <https://github.com/HexagonMC>
- * Copyright (C) 2017  Zartec <zartec@mccluster.eu>
+ * Copyright (C) 2017 - 2018  HexagonMc <https://github.com/HexagonMC>
+Copyright (C) 2017 - 2018  Zartec <zartec@mccluster.eu>
  *
  *     This file is part of Spigot-Annotations.
  *
@@ -63,18 +63,14 @@ public class PluginDependencyTest {
     @Test
     public void testToString() {
         assertThat(_dep.toString()).isEqualTo(_depSame.toString());
-        Arrays.asList(_dep, _depSame).forEach(dep -> {
-            dep.setType(DependencyType.DEPEND);
-        });
+        Arrays.asList(_dep, _depSame).forEach(dep -> dep.setType(DependencyType.DEPEND));
         assertThat(_dep.toString()).isEqualTo(_depSame.toString());
     }
 
     @Test
     public void testHashCode() {
         assertThat(_dep.hashCode()).isEqualTo(_depSame.hashCode());
-        Arrays.asList(_dep, _depSame).forEach(dep -> {
-            dep.setType(DependencyType.DEPEND);
-        });
+        Arrays.asList(_dep, _depSame).forEach(dep -> dep.setType(DependencyType.DEPEND));
         assertThat(_dep.hashCode()).isEqualTo(_depSame.hashCode());
     }
 

@@ -1,7 +1,7 @@
 /**
  *
- * Copyright (C) 2017  HexagonMc <https://github.com/HexagonMC>
- * Copyright (C) 2017  Zartec <zartec@mccluster.eu>
+ * Copyright (C) 2017 - 2018  HexagonMc <https://github.com/HexagonMC>
+ * Copyright (C) 2017 - 2018  Zartec <zartec@mccluster.eu>
  *
  *     This file is part of Spigot-Annotations.
  *
@@ -51,10 +51,10 @@ import java.util.Map;
 
 /**
  * Utility class for loading and saving plugin yaml files.
- * 
+ *
  * </p> It serializes and deserializes {@link PluginMetadata} to and from yaml
  * files.
- * 
+ *
  * @see <a href="http://wiki.bukkit.org/Plugin_YAML">Plugin_YAML</a>
  */
 public class PluginYml {
@@ -80,7 +80,7 @@ public class PluginYml {
 
     /**
      * The yaml adapter for read and write.
-     * 
+     *
      * @see Yaml
      */
     private static final Yaml _adapter;
@@ -101,7 +101,7 @@ public class PluginYml {
 
     /**
      * Throw exception if used. Utility classes should not be instanced.
-     * 
+     *
      * @throws RuntimeException if someone tries to call this constructor this
      *         class.
      */
@@ -111,7 +111,7 @@ public class PluginYml {
 
     /**
      * Reads metadata from the given path.
-     * 
+     *
      * @param path The path to read from
      * @return The read metadata
      * @throws IOException if something goes wrong during load
@@ -126,16 +126,15 @@ public class PluginYml {
 
     /**
      * Reads metadata from the given reader.
-     * 
+     *
      * @param reader The reader to read from
      * @return The read metadata
-     * @throws IOException if something goes wrong during load
      * @see PluginMetadata
      * @see Reader
      */
     @SuppressWarnings("unchecked")
-    public static PluginMetadata read(Reader reader) throws IOException {
-        Map<String, Object> map = (Map<String, Object>) _adapter.load(reader);
+    public static PluginMetadata read(Reader reader) {
+        Map<String, Object> map = _adapter.load(reader);
         if (map != null && map.containsKey("name") && map.get("name") instanceof String) {
             PluginMetadata meta = new PluginMetadata((String) map.get("name"));
             if (map.containsKey("version") && map.get("version") instanceof String) {
@@ -190,7 +189,7 @@ public class PluginYml {
                 Map<String, Object> commands = (Map<String, Object>) map.get("commands");
                 commands.forEach((name, values) -> {
                     PluginCommand command = new PluginCommand(name);
-                    if (values != null && values instanceof Map) {
+                    if (values instanceof Map) {
                         Map<String, Object> valueMap = (Map<String, Object>) values;
                         if (valueMap.containsKey("description") && valueMap.get("description") instanceof String) {
                             command.setDescription((String) valueMap.get("description"));
@@ -199,9 +198,7 @@ public class PluginYml {
                             command.addAlias((String) valueMap.get("aliases"));
                         }
                         if (valueMap.containsKey("aliases") && valueMap.get("aliases") instanceof List) {
-                            ((List<String>) valueMap.get("aliases")).forEach(alias -> {
-                                command.addAlias(alias);
-                            });
+                            ((List<String>) valueMap.get("aliases")).forEach(command::addAlias);
                         }
                         if (valueMap.containsKey("permission") && valueMap.get("permission") instanceof String) {
                             command.setPermission((String) valueMap.get("permission"));
@@ -217,7 +214,7 @@ public class PluginYml {
                 Map<String, Object> permissions = (Map<String, Object>) map.get("permissions");
                 permissions.forEach((name, values) -> {
                     PluginPermission perm = new PluginPermission(name);
-                    if (values != null && values instanceof Map) {
+                    if (values instanceof Map) {
                         Map<String, Object> valueMap = (Map<String, Object>) values;
                         if (valueMap.containsKey("description") && valueMap.get("description") instanceof String) {
                             perm.setDescription((String) valueMap.get("description"));
@@ -245,7 +242,7 @@ public class PluginYml {
 
     /**
      * Writes metadata to the given path.
-     * 
+     *
      * @param path The path to write to
      * @param meta The metadata to write
      * @throws IOException if something goes wrong during save
@@ -260,7 +257,7 @@ public class PluginYml {
 
     /**
      * Writes metadata to the given writer.
-     * 
+     *
      * @param writer The writer to write to
      * @param meta The metadata to write
      * @throws IOException if something goes wrong during save
@@ -294,7 +291,7 @@ public class PluginYml {
         }
         metaMap.put("main", meta.getMain());
         if (meta.getDatabase() != null) {
-            metaMap.put("database", meta.getDatabase().booleanValue());
+            metaMap.put("database", meta.getDatabase());
         }
         if (!meta.getDependencies().isEmpty()) {
             List<String> depend = new ArrayList<>();
@@ -312,7 +309,7 @@ public class PluginYml {
                         loadbefore.add(dep.getName());
                         break;
                     default:
-                        continue;
+                        break;
                 }
             }
             metaMap.put("depend", depend);

@@ -1,7 +1,7 @@
 /**
  *
- * Copyright (C) 2017  HexagonMc <https://github.com/HexagonMC>
- * Copyright (C) 2017  Zartec <zartec@mccluster.eu>
+ * Copyright (C) 2017 - 2018  HexagonMc <https://github.com/HexagonMC>
+ * Copyright (C) 2017 - 2018  Zartec <zartec@mccluster.eu>
  *
  *     This file is part of Spigot-Annotations.
  *
@@ -27,11 +27,16 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
+
 import eu.hexagonmc.spigot.annotation.meta.LoadOn;
+import eu.hexagonmc.spigot.annotation.meta.PluginCommand;
 import eu.hexagonmc.spigot.annotation.meta.PluginDependency;
 import eu.hexagonmc.spigot.annotation.meta.PluginMetadata;
+import eu.hexagonmc.spigot.annotation.meta.PluginPermission;
 import eu.hexagonmc.spigot.annotation.meta.PluginYml;
+import eu.hexagonmc.spigot.annotation.plugin.Command;
 import eu.hexagonmc.spigot.annotation.plugin.Dependency;
+import eu.hexagonmc.spigot.annotation.plugin.Permission;
 import eu.hexagonmc.spigot.annotation.plugin.Plugin;
 
 import java.io.BufferedWriter;
@@ -50,7 +55,7 @@ import javax.lang.model.type.TypeKind;
 import javax.tools.Diagnostic.Kind;
 import javax.tools.FileObject;
 
-public class MetadataProcessor {
+class MetadataProcessor {
 
     private TypeElement _element;
     private Plugin _annotation;
@@ -162,9 +167,9 @@ public class MetadataProcessor {
 
             // Parse spigot database
             boolean database = _annotation.spigot().database();
-            if (_meta.getDatabase() == null && database != false) {
-                _meta.setDatabase(database);
-            } else if (_meta.getDatabase() != null && _meta.getDatabase().booleanValue() != database) {
+            if (_meta.getDatabase() == null && database) {
+                _meta.setDatabase(true);
+            } else if (_meta.getDatabase() != null && _meta.getDatabase() != database) {
                 _meta.setDatabase(database);
             }
 
@@ -176,6 +181,32 @@ public class MetadataProcessor {
                 }
             } else {
                 _meta.setPrefix(value);
+            }
+
+            // Parse spigot commands
+            Command[] commands = _annotation.spigot().commands();
+            if (commands.length > 0) {
+                for (Command command : commands) {
+                    String commandName = command.name();
+                    if (Strings.isNullOrEmpty(commandName)) {
+                        error("Empty command name is not allowed", "spigot.commands");
+                        continue;
+                    }
+                    _meta.replaceCommand(PluginCommand.from(command));
+                }
+            }
+
+            // Parse spigot permissions
+            Permission[] permissions = _annotation.spigot().permissions();
+            if (permissions.length > 0) {
+                for (Permission permission : permissions) {
+                    String permissionName = permission.name();
+                    if (Strings.isNullOrEmpty(permissionName)) {
+                        error("Empty permission name is not allowed", "spigot.permissions");
+                        continue;
+                    }
+                    _meta.replacePermission(PluginPermission.from(permission));
+                }
             }
         }
 
@@ -266,9 +297,8 @@ public class MetadataProcessor {
             if (_processingEnv.getTypeUtils().isSubtype(key.getReturnType(),
                     _processingEnv.getElementUtils().getTypeElement(Annotation.class.getName()).asType())) {
                 AnnotationMirror mirror = (AnnotationMirror) value.getValue();
-                mirror.getElementValues().forEach((mirrorKey, mirrorValue) -> {
-                    builder.put(key.getSimpleName().toString() + "." + mirrorKey.getSimpleName().toString(), Pair.of(mirror, mirrorValue));
-                });
+                mirror.getElementValues().forEach((mirrorKey, mirrorValue) ->
+                        builder.put(key.getSimpleName().toString() + "." + mirrorKey.getSimpleName().toString(), Pair.of(mirror, mirrorValue)));
             } else {
                 builder.put(key.getSimpleName().toString(), Pair.of(_mirror, value));
             }
@@ -278,7 +308,7 @@ public class MetadataProcessor {
 
     private static class Pair<F, S> {
 
-        public static <F, S> Pair<F, S> of(F first, S second) {
+        static <F, S> Pair<F, S> of(F first, S second) {
             return new Pair<>(first, second);
         }
 
@@ -290,11 +320,11 @@ public class MetadataProcessor {
             _second = second;
         }
 
-        public F getFirst() {
+        F getFirst() {
             return _first;
         }
 
-        public S getSecond() {
+        S getSecond() {
             return _second;
         }
     }

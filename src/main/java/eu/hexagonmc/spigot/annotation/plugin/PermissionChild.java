@@ -1,7 +1,7 @@
 /**
  *
- * Copyright (C) 2017  HexagonMc <https://github.com/HexagonMC>
- * Copyright (C) 2017  Zartec <zartec@mccluster.eu>
+ * Copyright (C) 2017 - 2018  HexagonMc <https://github.com/HexagonMC>
+ * Copyright (C) 2017 - 2018  Zartec <zartec@mccluster.eu>
  *
  *     This file is part of Spigot-Annotations.
  *
@@ -35,7 +35,7 @@ public @interface PermissionChild {
 
     /**
      * The name of this child permission.
-     * 
+     *
      * @return the name
      */
     String name();
@@ -43,7 +43,7 @@ public @interface PermissionChild {
     /**
      * True to inherit parent permission. False to inherit inversed parent
      * permission.
-     * 
+     *
      * @return the value
      */
     boolean value();

@@ -1,7 +1,7 @@
 /**
  *
- * Copyright (C) 2017  HexagonMc <https://github.com/HexagonMC>
- * Copyright (C) 2017  Zartec <zartec@mccluster.eu>
+ * Copyright (C) 2017 - 2018  HexagonMc <https://github.com/HexagonMC>
+Copyright (C) 2017 - 2018  Zartec <zartec@mccluster.eu>
  *
  *     This file is part of Spigot-Annotations.
  *
@@ -22,69 +22,63 @@
  */
 package eu.hexagonmc.spigot.annotation.test.meta;
 
-import com.google.common.truth.FailureStrategy;
+import com.google.common.truth.Fact;
+import com.google.common.truth.FailureMetadata;
 import com.google.common.truth.Subject;
-import com.google.common.truth.SubjectFactory;
 import com.google.common.truth.Truth;
 import eu.hexagonmc.spigot.annotation.meta.PluginCommand;
 
 public class PluginCommandSubject extends Subject<PluginCommandSubject, PluginCommand> {
 
-    private static final SubjectFactory<PluginCommandSubject, PluginCommand> METADATA_SUBJECT_FACTORY;
+    private static final Subject.Factory<PluginCommandSubject, PluginCommand> METADATA_SUBJECT_FACTORY;
 
     static {
-        METADATA_SUBJECT_FACTORY = new SubjectFactory<PluginCommandSubject, PluginCommand>() {
-
-            @Override
-            public PluginCommandSubject getSubject(FailureStrategy failureStrategy, PluginCommand target) {
-                return new PluginCommandSubject(failureStrategy, target);
-            }
-        };
+        METADATA_SUBJECT_FACTORY = PluginCommandSubject::new;
     }
 
-    public PluginCommandSubject(FailureStrategy failureStrategy, PluginCommand actual) {
-        super(failureStrategy, actual);
+    private PluginCommandSubject(FailureMetadata failureMetadata, PluginCommand actual) {
+        super(failureMetadata, actual);
     }
 
     public static PluginCommandSubject assertThat(PluginCommand permission) {
         return Truth.assertAbout(METADATA_SUBJECT_FACTORY).that(permission);
     }
 
-    public void setEmptyNameThrows() {
+    void setEmptyNameThrows() {
         try {
             actual().setName("");
-            fail("set empty name throws");
+            failWithActual(Fact.simpleFact("set empty name throws"));
         } catch (IllegalArgumentException e) {
             // ignore
         }
     }
 
-    public void nameEquals(PluginCommand other) {
+    void nameEquals(PluginCommand other) {
         if (!actual().getName().equals(other.getName())) {
-            fail("name equals", other);
+            failWithActual(Fact.fact("name equals", other));
         }
     }
 
-    public void nameNotEquals(PluginCommand other) {
+    void nameNotEquals(PluginCommand other) {
         if (actual().getName().equals(other.getName())) {
-            fail("name not equals", other);
+            failWithActual(Fact.fact("name not equals", other));
         }
     }
 
-    public void addEmptyAliasThrows() {
+    void addEmptyAliasThrows() {
         try {
             actual().addAlias("");
-            fail("add empty child throws");
+            failWithActual(Fact.simpleFact("add empty child throws"));
         } catch (IllegalArgumentException e) {
             // ignore
         }
     }
 
-    public void addDuplicateAliasThrows() {
+    void addDuplicateAliasThrows() {
         try {
             actual().addAlias("test");
             actual().addAlias("test");
-            fail("add duplicate alias throws");
+            failWithActual(Fact.simpleFact("add duplicate alias throws"));
         } catch (IllegalArgumentException e) {
             // ignore
         } finally {
@@ -92,15 +86,15 @@ public class PluginCommandSubject extends Subject<PluginCommandSubject, PluginCo
         }
     }
 
-    public void aliasesEquals(PluginCommand other) {
+    void aliasesEquals(PluginCommand other) {
         if (!actual().getAliases().equals(other.getAliases())) {
-            fail("aliases equals", other);
+            failWithActual(Fact.fact("aliases equals", other));
         }
     }
 
-    public void aliasesNotEquals(PluginCommand other) {
+    void aliasesNotEquals(PluginCommand other) {
         if (actual().getAliases().equals(other.getAliases())) {
-            fail("aliases not equals", other);
+            failWithActual(Fact.fact("aliases not equals", other));
         }
     }
 }

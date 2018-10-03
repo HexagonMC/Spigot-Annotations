@@ -1,7 +1,7 @@
 /**
  *
- * Copyright (C) 2017  HexagonMc <https://github.com/HexagonMC>
- * Copyright (C) 2017  Zartec <zartec@mccluster.eu>
+ * Copyright (C) 2017 - 2018  HexagonMc <https://github.com/HexagonMC>
+Copyright (C) 2017 - 2018  Zartec <zartec@mccluster.eu>
  *
  *     This file is part of Spigot-Annotations.
  *
@@ -22,9 +22,9 @@
  */
 package eu.hexagonmc.spigot.annotation.test.meta;
 
-import com.google.common.truth.FailureStrategy;
+import com.google.common.truth.Fact;
+import com.google.common.truth.FailureMetadata;
 import com.google.common.truth.Subject;
-import com.google.common.truth.SubjectFactory;
 import com.google.common.truth.Truth;
 import eu.hexagonmc.spigot.annotation.meta.PluginCommand;
 import eu.hexagonmc.spigot.annotation.meta.PluginDependency;
@@ -35,86 +35,80 @@ import java.util.HashSet;
 
 public class PluginMetadataSubject extends Subject<PluginMetadataSubject, PluginMetadata> {
 
-    private static final SubjectFactory<PluginMetadataSubject, PluginMetadata> METADATA_SUBJECT_FACTORY;
+    private static final Subject.Factory<PluginMetadataSubject, PluginMetadata> METADATA_SUBJECT_FACTORY;
 
     static {
-        METADATA_SUBJECT_FACTORY = new SubjectFactory<PluginMetadataSubject, PluginMetadata>() {
-
-            @Override
-            public PluginMetadataSubject getSubject(FailureStrategy failureStrategy, PluginMetadata target) {
-                return new PluginMetadataSubject(failureStrategy, target);
-            }
-        };
+        METADATA_SUBJECT_FACTORY = PluginMetadataSubject::new;
     }
 
-    public PluginMetadataSubject(FailureStrategy failureStrategy, PluginMetadata actual) {
-        super(failureStrategy, actual);
+    private PluginMetadataSubject(FailureMetadata failureMetadata, PluginMetadata actual) {
+        super(failureMetadata, actual);
     }
 
     public static PluginMetadataSubject assertThat(PluginMetadata metadata) {
         return Truth.assertAbout(METADATA_SUBJECT_FACTORY).that(metadata);
     }
 
-    public void setEmptyNameThrows() {
+    void setEmptyNameThrows() {
         try {
             actual().setName("");
-            fail("set empty name throws");
+            failWithActual(Fact.simpleFact("set empty name throws"));
         } catch (IllegalArgumentException e) {
             // ignore
         }
     }
 
-    public void nameMatchPattern() {
+    void nameMatchPattern() {
         if (!PluginMetadata.NAME_PATTERN.matcher(actual().getName()).matches()) {
-            fail("name match pattern", PluginMetadata.NAME_PATTERN);
+            failWithActual(Fact.fact("name match pattern", PluginMetadata.NAME_PATTERN));
         }
     }
 
-    public void nameNotMatchPattern() {
+    void nameNotMatchPattern() {
         if (PluginMetadata.NAME_PATTERN.matcher(actual().getName()).matches()) {
-            fail("name not match pattern", PluginMetadata.NAME_PATTERN);
+            failWithActual(Fact.fact("name not match pattern", PluginMetadata.NAME_PATTERN));
         }
     }
 
-    public void nameEquals(PluginMetadata other) {
+    void nameEquals(PluginMetadata other) {
         if (!actual().getName().equals(other.getName())) {
-            fail("name equals", other);
+            failWithActual(Fact.fact("name equals", other));
         }
     }
 
-    public void nameNotEquals(PluginMetadata other) {
+    void nameNotEquals(PluginMetadata other) {
         if (actual().getName().equals(other.getName())) {
-            fail("name not equals", other);
+            failWithActual(Fact.fact("name not equals", other));
         }
     }
 
-    public void addEmptyAuthorThrows() {
+    void addEmptyAuthorThrows() {
         try {
             actual().addAuthor("");
-            fail("add empty author throws");
+            failWithActual(Fact.simpleFact("add empty author throws"));
         } catch (IllegalArgumentException e) {
             // ignore
         }
     }
 
-    public void authorsEquals(PluginMetadata other) {
+    void authorsEquals(PluginMetadata other) {
         if (!actual().getAuthors().equals(other.getAuthors())) {
-            fail("authors equals", other);
+            failWithActual(Fact.fact("authors equals", other));
         }
     }
 
-    public void authorsNotEquals(PluginMetadata other) {
+    void authorsNotEquals(PluginMetadata other) {
         if (actual().getAuthors().equals(other.getAuthors())) {
-            fail("authors not equals", other);
+            failWithActual(Fact.fact("authors not equals", other));
         }
     }
 
-    public void addDuplicateDependencyThrows() {
+    void addDuplicateDependencyThrows() {
         PluginDependency dep = new PluginDependency("test");
         try {
             actual().addDependency(dep);
             actual().addDependency(dep);
-            fail("add duplicate dependency throws");
+            failWithActual(Fact.simpleFact("add duplicate dependency throws"));
         } catch (IllegalArgumentException e) {
             // ignore
         } finally {
@@ -122,24 +116,24 @@ public class PluginMetadataSubject extends Subject<PluginMetadataSubject, Plugin
         }
     }
 
-    public void dependenciesEquals(PluginMetadata other) {
+    void dependenciesEquals(PluginMetadata other) {
         if (!new HashSet<>(actual().getDependencies()).equals(new HashSet<>(other.getDependencies()))) {
-            fail("dependencies equals", other);
+            failWithActual(Fact.fact("dependencies equals", other));
         }
     }
 
-    public void dependenciesNotEquals(PluginMetadata other) {
+    void dependenciesNotEquals(PluginMetadata other) {
         if (new HashSet<>(actual().getDependencies()).equals(new HashSet<>(other.getDependencies()))) {
-            fail("dependencies not equals", other);
+            failWithActual(Fact.fact("dependencies not equals", other));
         }
     }
 
-    public void addDuplicateCommandThrows() {
+    void addDuplicateCommandThrows() {
         PluginCommand cmd = new PluginCommand("test");
         try {
             actual().addCommand(cmd);
             actual().addCommand(cmd);
-            fail("add duplicate command throws");
+            failWithActual(Fact.simpleFact("add duplicate command throws"));
         } catch (IllegalArgumentException e) {
             // ignore
         } finally {
@@ -147,24 +141,24 @@ public class PluginMetadataSubject extends Subject<PluginMetadataSubject, Plugin
         }
     }
 
-    public void commandsEquals(PluginMetadata other) {
+    void commandsEquals(PluginMetadata other) {
         if (!new HashSet<>(actual().getCommands()).equals(new HashSet<>(other.getCommands()))) {
-            fail("commands equals", other);
+            failWithActual(Fact.fact("commands equals", other));
         }
     }
 
-    public void commandsNotEquals(PluginMetadata other) {
+    void commandsNotEquals(PluginMetadata other) {
         if (new HashSet<>(actual().getCommands()).equals(new HashSet<>(other.getCommands()))) {
-            fail("commands not equals", other);
+            failWithActual(Fact.fact("commands not equals", other));
         }
     }
 
-    public void addDuplicatePermissionThrows() {
+    void addDuplicatePermissionThrows() {
         PluginPermission perm = new PluginPermission("test");
         try {
             actual().addPermission(perm);
             actual().addPermission(perm);
-            fail("add duplicate permission throws");
+            failWithActual(Fact.simpleFact("add duplicate permission throws"));
         } catch (IllegalArgumentException e) {
             // ignore
         } finally {
@@ -172,29 +166,29 @@ public class PluginMetadataSubject extends Subject<PluginMetadataSubject, Plugin
         }
     }
 
-    public void permissionsEquals(PluginMetadata other) {
+    void permissionsEquals(PluginMetadata other) {
         if (!new HashSet<>(actual().getPermissions()).equals(new HashSet<>(other.getPermissions()))) {
-            fail("permissions equals", other);
+            failWithActual(Fact.fact("permissions equals", other));
         }
     }
 
-    public void permissionsNotEquals(PluginMetadata other) {
+    void permissionsNotEquals(PluginMetadata other) {
         if (new HashSet<>(actual().getPermissions()).equals(new HashSet<>(other.getPermissions()))) {
-            fail("permissions not equals", other);
+            failWithActual(Fact.fact("permissions not equals", other));
         }
     }
 
     @Override
     public void isEqualTo(Object other) {
         if (!actual().equals(other)) {
-            fail("equals", other);
+            failWithActual(Fact.fact("equals", other));
         }
     }
 
     @Override
     public void isNotEqualTo(Object other) {
         if (actual().equals(other)) {
-            fail("not equals", other);
+            failWithActual(Fact.fact("not equals", other));
         }
     }
 }

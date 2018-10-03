@@ -1,7 +1,7 @@
 /**
  *
- * Copyright (C) 2017  HexagonMc <https://github.com/HexagonMC>
- * Copyright (C) 2017  Zartec <zartec@mccluster.eu>
+ * Copyright (C) 2017 - 2018  HexagonMc <https://github.com/HexagonMC>
+ * Copyright (C) 2017 - 2018  Zartec <zartec@mccluster.eu>
  *
  *     This file is part of Spigot-Annotations.
  *
@@ -20,9 +20,6 @@
  *     along with Spigot-Annotations.
  *     If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- * 
- */
 package eu.hexagonmc.spigot.annotation.plugin;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -38,28 +35,28 @@ public @interface Command {
 
     /**
      * Name of this command.
-     * 
+     *
      * @return the name
      */
     String name();
 
     /**
      * List of alias command names for this command.
-     * 
+     *
      * @return the alias list
      */
     String[] aliases() default {};
 
     /**
      * The permission required to use this command.
-     * 
+     *
      * @return the permission
      */
     String permission() default "";
 
     /**
      * The usage message printed if this command is used wrong.
-     * 
+     *
      * @return the usage message
      */
     String usage() default "";

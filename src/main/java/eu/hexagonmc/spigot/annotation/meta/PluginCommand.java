@@ -1,7 +1,7 @@
 /**
  *
- * Copyright (C) 2017  HexagonMc <https://github.com/HexagonMC>
- * Copyright (C) 2017  Zartec <zartec@mccluster.eu>
+ * Copyright (C) 2017 - 2018  HexagonMc <https://github.com/HexagonMC>
+ * Copyright (C) 2017 - 2018  Zartec <zartec@mccluster.eu>
  *
  *     This file is part of Spigot-Annotations.
  *
@@ -38,7 +38,7 @@ public class PluginCommand {
     /**
      * Creates command from an annotation. Parses the data stored in the
      * annotation.
-     * 
+     *
      * @param annotation The annotation to parse for data
      * @return The new command
      * @see PluginCommand
@@ -80,7 +80,7 @@ public class PluginCommand {
 
     /**
      * Creates a new command the given name.
-     * 
+     *
      * @param name The name of the command
      */
     public PluginCommand(String name) {
@@ -89,7 +89,7 @@ public class PluginCommand {
 
     /**
      * Sets the name of this command.
-     * 
+     *
      * @param name The name to set
      */
     public void setName(String name) {
@@ -100,7 +100,7 @@ public class PluginCommand {
 
     /**
      * Gets the name of this command.
-     * 
+     *
      * @return The name
      */
     public String getName() {
@@ -109,7 +109,7 @@ public class PluginCommand {
 
     /**
      * Sets the description of this command.
-     * 
+     *
      * @param description The description to set
      */
     public void setDescription(String description) {
@@ -118,7 +118,7 @@ public class PluginCommand {
 
     /**
      * Gets the description of this command.
-     * 
+     *
      * @return The description
      */
     public String getDescription() {
@@ -127,7 +127,7 @@ public class PluginCommand {
 
     /**
      * Adds an alias to this command.
-     * 
+     *
      * @param alias The alias to add
      */
     public void addAlias(String alias) {
@@ -139,7 +139,7 @@ public class PluginCommand {
 
     /**
      * Removes an alias from this command.
-     * 
+     *
      * @param alias The alias to remove
      * @return true if the command was removed false if it did not exist
      */
@@ -149,7 +149,7 @@ public class PluginCommand {
 
     /**
      * Gets the list of aliases for this command.
-     * 
+     *
      * @return The list of aliases
      */
     public Collection<String> getAliases() {
@@ -158,7 +158,7 @@ public class PluginCommand {
 
     /**
      * Sets the permission of this command.
-     * 
+     *
      * @param permission The permission to set
      */
     public void setPermission(String permission) {
@@ -167,7 +167,7 @@ public class PluginCommand {
 
     /**
      * Gets the permission of this command.
-     * 
+     *
      * @return The permission
      */
     public String getPermission() {
@@ -176,7 +176,7 @@ public class PluginCommand {
 
     /**
      * Sets the usage of this command.
-     * 
+     *
      * @param usage The usage to set
      */
     public void setUsage(String usage) {
@@ -185,7 +185,7 @@ public class PluginCommand {
 
     /**
      * Gets the usage of this command.
-     * 
+     *
      * @return The usage
      */
     public String getUsage() {
@@ -251,12 +251,9 @@ public class PluginCommand {
             return false;
         }
         if (_usage == null) {
-            if (other._usage != null) {
-                return false;
-            }
-        } else if (!_usage.equals(other._usage)) {
-            return false;
+            return other._usage == null;
+        } else {
+            return _usage.equals(other._usage);
         }
-        return true;
     }
 }

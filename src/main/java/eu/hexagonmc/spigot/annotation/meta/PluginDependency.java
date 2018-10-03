@@ -1,7 +1,7 @@
 /**
  *
- * Copyright (C) 2017  HexagonMc <https://github.com/HexagonMC>
- * Copyright (C) 2017  Zartec <zartec@mccluster.eu>
+ * Copyright (C) 2017 - 2018  HexagonMc <https://github.com/HexagonMC>
+ * Copyright (C) 2017 - 2018  Zartec <zartec@mccluster.eu>
  *
  *     This file is part of Spigot-Annotations.
  *
@@ -30,12 +30,12 @@ import eu.hexagonmc.spigot.annotation.plugin.Dependency;
 
 /**
  * Represents a plugin dependency.
- * 
+ *
  * </p> The {@code name} specifies the plugin to depend on.
- * 
+ *
  * </p> The {@code type} specifies the if the dependency is required, optionally
  * or should be loaded after the current plugin.
- * 
+ *
  * @see DependencyType
  * @see <a href="http://wiki.bukkit.org/Plugin_YAML">Plugin_YAML</a>
  */
@@ -44,7 +44,7 @@ public class PluginDependency {
     /**
      * Creates dependency from an annotation. Parses the data stored in the
      * annotation.
-     * 
+     *
      * @param annotation The annotation to parse for data
      * @return The new dependency
      * @see PluginDependency
@@ -61,14 +61,14 @@ public class PluginDependency {
     private String _name;
     /**
      * The type of this dependency.
-     * 
+     *
      * @see DependencyType
      */
     private DependencyType _type;
 
     /**
      * Creates a new dependency from a plugin name.
-     * 
+     *
      * @param name The name of the plugin to depend on
      */
     public PluginDependency(String name) {
@@ -77,7 +77,7 @@ public class PluginDependency {
 
     /**
      * The name of this dependency.
-     * 
+     *
      * @return The name
      */
     public String getName() {
@@ -86,7 +86,7 @@ public class PluginDependency {
 
     /**
      * Sets the name of this dependency.
-     * 
+     *
      * @param name The name to set
      */
     public void setName(String name) {
@@ -97,7 +97,7 @@ public class PluginDependency {
 
     /**
      * The type of this dependency.
-     * 
+     *
      * @return The type
      * @see DependencyType
      */
@@ -107,7 +107,7 @@ public class PluginDependency {
 
     /**
      * Sets the type of this dependency.
-     * 
+     *
      * @param type The type to set
      */
     public void setType(DependencyType type) {
@@ -155,12 +155,9 @@ public class PluginDependency {
             return false;
         }
         if (_type == null) {
-            if (other._type != null) {
-                return false;
-            }
-        } else if (_type != other._type) {
-            return false;
+            return other._type == null;
+        } else {
+            return _type == other._type;
         }
-        return true;
     }
 }

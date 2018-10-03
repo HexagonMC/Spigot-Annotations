@@ -1,7 +1,7 @@
 /**
  *
- * Copyright (C) 2017  HexagonMc <https://github.com/HexagonMC>
- * Copyright (C) 2017  Zartec <zartec@mccluster.eu>
+ * Copyright (C) 2017 - 2018  HexagonMc <https://github.com/HexagonMC>
+ * Copyright (C) 2017 - 2018  Zartec <zartec@mccluster.eu>
  *
  *     This file is part of Spigot-Annotations.
  *
@@ -128,38 +128,10 @@ public class AnnotationProcessor extends AbstractProcessor {
         _processorBungee.init(processingEnv);
 
         String extraFiles = processingEnv.getOptions().get(EXTRA_FILES_SPIGOT_OPTION);
-        if (extraFiles != null && !extraFiles.isEmpty()) {
-            for (String extraFile : SPLITTER.split(extraFiles)) {
-                Path path = Paths.get(extraFile);
-                try {
-                    PluginMetadata meta = PluginYml.read(path);
-                    if (_metaSpigot == null) {
-                        _metaSpigot = meta;
-                    } else {
-                        _metaSpigot.accept(meta);
-                    }
-                } catch (IOException e) {
-                    getMessager().printMessage(ERROR, "Failed to read extra plugin metadata from " + path + ": " + e.getMessage());
-                }
-            }
-        }
+        _metaSpigot = initExtraFiles(extraFiles, _metaSpigot);
 
         extraFiles = processingEnv.getOptions().get(EXTRA_FILES_BUNGEE_OPTION);
-        if (extraFiles != null && !extraFiles.isEmpty()) {
-            for (String extraFile : SPLITTER.split(extraFiles)) {
-                Path path = Paths.get(extraFile);
-                try {
-                    PluginMetadata meta = PluginYml.read(path);
-                    if (_metaBungee == null) {
-                        _metaBungee = meta;
-                    } else {
-                        _metaBungee.accept(meta);
-                    }
-                } catch (IOException e) {
-                    getMessager().printMessage(ERROR, "Failed to read extra plugin metadata from " + path + ": " + e.getMessage());
-                }
-            }
-        }
+        _metaBungee = initExtraFiles(extraFiles, _metaBungee);
 
         String outputFile = processingEnv.getOptions().get(OUTPUT_FILE_SPIGOT_OPTION);
         if (outputFile != null && !outputFile.isEmpty()) {
@@ -170,6 +142,25 @@ public class AnnotationProcessor extends AbstractProcessor {
         if (outputFile != null && !outputFile.isEmpty()) {
             _outputPathBungee = Paths.get(outputFile);
         }
+    }
+
+    private PluginMetadata initExtraFiles(String extraFiles, PluginMetadata metaData) {
+        if (extraFiles != null && !extraFiles.isEmpty()) {
+            for (String extraFile : SPLITTER.split(extraFiles)) {
+                Path path = Paths.get(extraFile);
+                try {
+                    PluginMetadata meta = PluginYml.read(path);
+                    if (metaData == null) {
+                        metaData = meta;
+                    } else {
+                        metaData.accept(meta);
+                    }
+                } catch (IOException e) {
+                    getMessager().printMessage(ERROR, "Failed to read extra plugin metadata from " + path + ": " + e.getMessage());
+                }
+            }
+        }
+        return metaData;
     }
 
     /**
@@ -239,7 +230,7 @@ public class AnnotationProcessor extends AbstractProcessor {
             List<String> classes = new ArrayList<>();
             elements.forEach(element -> classes.add(element.getSimpleName().toString()));
             getMessager().printMessage(ERROR,
-                    "More than two classes annotated with @Plugin: " + Arrays.toString(classes.toArray(new String[classes.size()])));
+                    "More than two classes annotated with @Plugin: " + Arrays.toString(classes.toArray(new String[0])));
             return false;
         }
 
@@ -295,7 +286,7 @@ public class AnnotationProcessor extends AbstractProcessor {
 
     /**
      * Gets an {@link TypeMirror} for the given class name.
-     * 
+     *
      * @param className The class name
      * @return The {@link TypeMirror} if it is found else null.
      */
@@ -309,7 +300,7 @@ public class AnnotationProcessor extends AbstractProcessor {
 
     /**
      * Gets the {@link Messager} of the {@link AbstractProcessor#processingEnv}.
-     * 
+     *
      * @return The messager
      */
     private Messager getMessager() {
@@ -319,7 +310,7 @@ public class AnnotationProcessor extends AbstractProcessor {
     /**
      * Tests if the given collection of elements contains the given annotation
      * class.
-     * 
+     *
      * @param elements The elements to search in
      * @param clazz The annotation class to look for
      * @return true if found false otherwise
@@ -328,6 +319,6 @@ public class AnnotationProcessor extends AbstractProcessor {
         if (elements.isEmpty()) {
             return false;
         }
-        return elements.stream().filter(element -> element.getQualifiedName().contentEquals(clazz.getName())).findAny().isPresent();
+        return elements.stream().anyMatch(element -> element.getQualifiedName().contentEquals(clazz.getName()));
     }
 }

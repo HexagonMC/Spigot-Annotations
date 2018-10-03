@@ -1,7 +1,7 @@
 /**
  *
- * Copyright (C) 2017  HexagonMc <https://github.com/HexagonMC>
- * Copyright (C) 2017  Zartec <zartec@mccluster.eu>
+ * Copyright (C) 2017 - 2018  HexagonMc <https://github.com/HexagonMC>
+Copyright (C) 2017 - 2018  Zartec <zartec@mccluster.eu>
  *
  *     This file is part of Spigot-Annotations.
  *
@@ -102,13 +102,13 @@ public class PluginYmlTest {
     }
 
     @Test
-    public void testReadEmpty() throws IOException {
+    public void testReadEmpty() {
         Reader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream("".getBytes())));
         assertThat(PluginYml.read(reader)).isNull();
     }
 
     @Test
-    public void testReadSimple() throws IOException {
+    public void testReadSimple() {
         String data =
                 "name: test";
         Reader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(data.getBytes())));
@@ -118,7 +118,7 @@ public class PluginYmlTest {
     }
 
     @Test
-    public void testReadFull() throws IOException {
+    public void testReadFull() {
         String data = ""
                 + "name: test\n"
                 + "main: " + getClass().getName() + "\n"
@@ -151,7 +151,7 @@ public class PluginYmlTest {
     }
 
     @Test
-    public void testReadFullAuthorsAndCommandAliases() throws IOException {
+    public void testReadFullAuthorsAndCommandAliases() {
         String data = ""
                 + "name: test\n"
                 + "main: " + getClass().getName() + "\n"
@@ -202,7 +202,7 @@ public class PluginYmlTest {
         PluginYml.write(writer, _meta);
         String data = new String(bos.toByteArray(), StandardCharsets.UTF_8);
         int index = data.indexOf("\n\n");
-        data = data.substring(index + 2, data.length());
+        data = data.substring(index + 2);
         assertThat(data).isEqualTo(""
                 + "name: test\n"
                 + "version: 1.0.0\n"
@@ -249,7 +249,7 @@ public class PluginYmlTest {
         PluginYml.write(writer, _meta);
         String data = new String(bos.toByteArray(), StandardCharsets.UTF_8);
         int index = data.indexOf("\n\n");
-        data = data.substring(index + 2, data.length());
+        data = data.substring(index + 2);
         assertThat(data).isEqualTo(""
                 + "name: test\n"
                 + "version: 1.0.0\n"

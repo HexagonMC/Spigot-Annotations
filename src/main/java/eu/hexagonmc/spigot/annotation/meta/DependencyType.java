@@ -1,7 +1,7 @@
 /**
  *
- * Copyright (C) 2017  HexagonMc <https://github.com/HexagonMC>
- * Copyright (C) 2017  Zartec <zartec@mccluster.eu>
+ * Copyright (C) 2017 - 2018  HexagonMc <https://github.com/HexagonMC>
+ * Copyright (C) 2017 - 2018  Zartec <zartec@mccluster.eu>
  *
  *     This file is part of Spigot-Annotations.
  *
@@ -24,16 +24,16 @@ package eu.hexagonmc.spigot.annotation.meta;
 
 /**
  * Represents the type of an dependency.
- * 
+ *
  * </p> A dependency with type {@link DependencyType#DEPEND} means that it is
  * required for the current plugin to load.
- * 
+ *
  * </p> A dependency with type {@link DependencyType#SOFTDEPEND} means that the
  * current plugin needs it for fill functionality.
- * 
+ *
  * </p> A dependency with type {@link DependencyType#LOADBEFORE} means that the
  * dependency needs your plugin to be loaded before it loads.
- * 
+ *
  * @see <a href="http://wiki.bukkit.org/Plugin_YAML">Plugin_YAML</a>
  */
 public enum DependencyType {

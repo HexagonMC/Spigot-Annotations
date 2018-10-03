@@ -1,7 +1,7 @@
 /**
  *
- * Copyright (C) 2017  HexagonMc <https://github.com/HexagonMC>
- * Copyright (C) 2017  Zartec <zartec@mccluster.eu>
+ * Copyright (C) 2017 - 2018  HexagonMc <https://github.com/HexagonMC>
+ * Copyright (C) 2017 - 2018  Zartec <zartec@mccluster.eu>
  *
  *     This file is part of Spigot-Annotations.
  *
@@ -45,10 +45,10 @@ import java.util.regex.Pattern;
 /**
  * Reresents the parsed metadata of an plugin loaded from file, gradle or
  * annotation.
- * 
+ *
  * </p> This metadata is used for Spigot and BungeeCord plugins. Each field
  * represents a value in the yaml file.
- * 
+ *
  * @see Consumer
  * @see <a href="http://wiki.bukkit.org/Plugin_YAML">Plugin_YAML</a>
  */
@@ -56,7 +56,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * The pattern plugin names must match.
-     * 
+     *
      * @see Pattern
      */
     public static final Pattern NAME_PATTERN = Pattern.compile("[A-Za-z0-9-_]{0,63}");
@@ -64,7 +64,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
     /**
      * Creates metadata from a plugins main-class name and an annotation. Parses
      * the data tored in the annotation.
-     * 
+     *
      * @param main The main-class name of the plugin
      * @param annotation The annotation to parse for data
      * @return The new metadata
@@ -92,7 +92,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
             if (!Strings.isNullOrEmpty(annotation.spigot().website())) {
                 meta.setWebsite(annotation.spigot().website());
             }
-            if (annotation.spigot().database() != false) {
+            if (annotation.spigot().database()) {
                 meta.setDatabase(true);
             }
             if (!Strings.isNullOrEmpty(annotation.spigot().prefix())) {
@@ -164,7 +164,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Creates a new metadata for a plugin with the given name.
-     * 
+     *
      * @param name The name of the plugin
      */
     public PluginMetadata(String name) {
@@ -173,7 +173,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Adds an author the the list of authors of this plugin.
-     * 
+     *
      * @param author The author to add
      */
     public void addAuthor(String author) {
@@ -184,7 +184,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Gets the list of authors for this plugin.
-     * 
+     *
      * @return The list of authors
      * @see Collection
      */
@@ -194,7 +194,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Removes an author from the list of authors of this plugin.
-     * 
+     *
      * @param author The author to remove
      * @return True if an author was removed false if not found
      */
@@ -204,7 +204,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Adds a dependency to this plugin.
-     * 
+     *
      * @param dependency The dependency to add
      * @see PluginDependency
      */
@@ -217,7 +217,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Gets all dependencies of this plugin.
-     * 
+     *
      * @return The dependencies
      * @see PluginDependency
      * @see Collection
@@ -228,7 +228,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Replaces or inserts a dependency of this plugin.
-     * 
+     *
      * @param dependency The dependency to replace or add
      * @return The old dependency if replaced or null
      * @see PluginDependency
@@ -239,7 +239,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Removes a dependency from this pugin.
-     * 
+     *
      * @param dependency The dependency to remove
      * @return true if the dependency was removed false if it did not exist
      * @see PluginDependency
@@ -250,7 +250,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Adds a command to this plugin.
-     * 
+     *
      * @param command The command to add
      * @see PluginCommand
      */
@@ -263,7 +263,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Gets all commands of this plugin.
-     * 
+     *
      * @return The command
      * @see PluginCommand
      * @see Collection
@@ -274,7 +274,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Replaces or inserts a command of this plugin.
-     * 
+     *
      * @param command The command to replace or add
      * @return The old command if replaced or null
      * @see PluginCommand
@@ -285,7 +285,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Removes a command from this pugin.
-     * 
+     *
      * @param command The command to remove
      * @return true if the command was removed false if it did not exist
      * @see PluginCommand
@@ -296,7 +296,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Adds a permission to this plugin.
-     * 
+     *
      * @param permission The permission to add
      * @see PluginPermission
      */
@@ -309,7 +309,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Gets all permissions of this plugin.
-     * 
+     *
      * @return The permissions
      * @see PluginPermission
      * @see Collection
@@ -320,7 +320,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Replaces or inserts a permission of this plugin.
-     * 
+     *
      * @param permission The permission to replace or add
      * @return The old permission if replaced or null
      * @see PluginPermission
@@ -331,7 +331,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Removes a permission from this pugin.
-     * 
+     *
      * @param permission The permission to remove
      * @return true if the permission was removed false if it did not exist
      * @see PluginPermission
@@ -389,7 +389,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Sets the name of this plugin.
-     * 
+     *
      * @param name The name to set
      */
     public void setName(String name) {
@@ -400,7 +400,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Gets the name of this plugin.
-     * 
+     *
      * @return The name
      */
     public String getName() {
@@ -409,7 +409,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Sets the version of this plugin.
-     * 
+     *
      * @param version The version to set
      */
     public void setVersion(String version) {
@@ -418,7 +418,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Gets the version of this plugin.
-     * 
+     *
      * @return The version
      */
     public String getVersion() {
@@ -427,7 +427,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Sets the description of this plugin.
-     * 
+     *
      * @param description The description to set
      */
     public void setDescription(String description) {
@@ -436,7 +436,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Gets the description of this plugin.
-     * 
+     *
      * @return The description
      */
     public String getDescription() {
@@ -445,7 +445,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Sets the load time of this plugin.
-     * 
+     *
      * @param loadOn The load time to set
      * @see LoadOn
      */
@@ -455,7 +455,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Gets the load time of this plugin.
-     * 
+     *
      * @return The load time
      * @see LoadOn
      */
@@ -465,7 +465,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Sets the website of this plugin.
-     * 
+     *
      * @param website The website to set
      */
     public void setWebsite(String website) {
@@ -474,7 +474,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Gets the website of this plugin.
-     * 
+     *
      * @return The website
      */
     public String getWebsite() {
@@ -483,7 +483,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Sets the main-class name of this plugin.
-     * 
+     *
      * @param main The main-class name to set
      */
     public void setMain(String main) {
@@ -493,7 +493,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Gets the main-class name of this plugin.
-     * 
+     *
      * @return The main-class name
      */
     public String getMain() {
@@ -502,7 +502,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Sets if the plugin should use plugin-databases.
-     * 
+     *
      * @param database True if it should be used false othewise
      */
     public void setDatabase(Boolean database) {
@@ -511,7 +511,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Gets if the plugin should use plugin-databases.
-     * 
+     *
      * @return True if it should be used false othewise
      */
     public Boolean getDatabase() {
@@ -520,7 +520,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Sets the log prefix of this plugin.
-     * 
+     *
      * @param prefix The log prefix to set
      */
     public void setPrefix(String prefix) {
@@ -529,7 +529,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
 
     /**
      * Gets the log prefix of this plugin.
-     * 
+     *
      * @return The log prefix
      */
     public String getPrefix() {
@@ -543,7 +543,7 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
                 .add("version", _version)
                 .add("description", _description)
                 .add("loadOn", _loadOn != null ? _loadOn.name() : null)
-                .add("authors", Arrays.toString(_authors.toArray(new String[_authors.size()])))
+                .add("authors", Arrays.toString(_authors.toArray(new String[0])))
                 .add("website", _website)
                 .add("main", _main)
                 .add("database", _database)
@@ -651,12 +651,9 @@ public class PluginMetadata implements Consumer<PluginMetadata> {
             return false;
         }
         if (_website == null) {
-            if (other._website != null) {
-                return false;
-            }
-        } else if (!_website.equals(other._website)) {
-            return false;
+            return other._website == null;
+        } else {
+            return _website.equals(other._website);
         }
-        return true;
     }
 }

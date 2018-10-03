@@ -16,11 +16,11 @@ publishing {
             groupId project.group
             artifactId project.name.toLowerCase()
             version project.version
-            
+
             from components.java
             artifact sourcesJar
             artifact javadocJar
-            
+
             pom.withXml {
                 asNode().children().last() + {
                     resolveStrategy = Closure.DELEGATE_FIRST

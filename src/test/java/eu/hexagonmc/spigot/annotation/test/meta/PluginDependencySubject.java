@@ -1,7 +1,7 @@
 /**
  *
- * Copyright (C) 2017  HexagonMc <https://github.com/HexagonMC>
- * Copyright (C) 2017  Zartec <zartec@mccluster.eu>
+ * Copyright (C) 2017 - 2018  HexagonMc <https://github.com/HexagonMC>
+Copyright (C) 2017 - 2018  Zartec <zartec@mccluster.eu>
  *
  *     This file is part of Spigot-Annotations.
  *
@@ -22,52 +22,46 @@
  */
 package eu.hexagonmc.spigot.annotation.test.meta;
 
-import com.google.common.truth.FailureStrategy;
+import com.google.common.truth.Fact;
+import com.google.common.truth.FailureMetadata;
 import com.google.common.truth.Subject;
-import com.google.common.truth.SubjectFactory;
 import com.google.common.truth.Truth;
 import eu.hexagonmc.spigot.annotation.meta.PluginDependency;
 
 public class PluginDependencySubject extends Subject<PluginDependencySubject, PluginDependency> {
 
-    private static final SubjectFactory<PluginDependencySubject, PluginDependency> METADATA_SUBJECT_FACTORY;
+    private static final Subject.Factory<PluginDependencySubject, PluginDependency> METADATA_SUBJECT_FACTORY;
 
     static {
-        METADATA_SUBJECT_FACTORY = new SubjectFactory<PluginDependencySubject, PluginDependency>() {
-
-            @Override
-            public PluginDependencySubject getSubject(FailureStrategy failureStrategy, PluginDependency target) {
-                return new PluginDependencySubject(failureStrategy, target);
-            }
-        };
+        METADATA_SUBJECT_FACTORY = PluginDependencySubject::new;
     }
 
-    public PluginDependencySubject(FailureStrategy failureStrategy, PluginDependency actual) {
-        super(failureStrategy, actual);
+    private PluginDependencySubject(FailureMetadata failureMetadata, PluginDependency actual) {
+        super(failureMetadata, actual);
     }
 
     public static PluginDependencySubject assertThat(PluginDependency permission) {
         return Truth.assertAbout(METADATA_SUBJECT_FACTORY).that(permission);
     }
 
-    public void setEmptyNameThrows() {
+    void setEmptyNameThrows() {
         try {
             actual().setName("");
-            fail("set empty name throws");
+            failWithActual(Fact.simpleFact("set empty name throws"));
         } catch (IllegalArgumentException e) {
             // ignore
         }
     }
 
-    public void nameEquals(PluginDependency other) {
+    void nameEquals(PluginDependency other) {
         if (!actual().getName().equals(other.getName())) {
-            fail("name equals", other);
+            failWithActual(Fact.fact("name equals", other));
         }
     }
 
-    public void nameNotEquals(PluginDependency other) {
+    void nameNotEquals(PluginDependency other) {
         if (actual().getName().equals(other.getName())) {
-            fail("name not equals", other);
+            failWithActual(Fact.fact("name not equals", other));
         }
     }
 }

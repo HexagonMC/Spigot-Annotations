@@ -1,7 +1,7 @@
 /**
  *
- * Copyright (C) 2017  HexagonMc <https://github.com/HexagonMC>
- * Copyright (C) 2017  Zartec <zartec@mccluster.eu>
+ * Copyright (C) 2017 - 2018  HexagonMc <https://github.com/HexagonMC>
+ * Copyright (C) 2017 - 2018  Zartec <zartec@mccluster.eu>
  *
  *     This file is part of Spigot-Annotations.
  *
@@ -24,13 +24,13 @@ package eu.hexagonmc.spigot.annotation.meta;
 
 /**
  * Represents the time the plugin is loaded.
- * 
+ *
  * </p> A dependency with load {@link LoadOn#STARTUP} is loaded on startup
  * before the world is loaded and populated. Mostly used by world-generators.
- * 
+ *
  * </p> A dependency with load {@link LoadOn#POSTWORLD} is normally loaded after
  * the world is loaded.
- * 
+ *
  * @see <a href="http://wiki.bukkit.org/Plugin_YAML">Plugin_YAML</a>
  */
 public enum LoadOn {

@@ -1,7 +1,7 @@
 /**
  *
- * Copyright (C) 2017  HexagonMc <https://github.com/HexagonMC>
- * Copyright (C) 2017  Zartec <zartec@mccluster.eu>
+ * Copyright (C) 2017 - 2018  HexagonMc <https://github.com/HexagonMC>
+ * Copyright (C) 2017 - 2018  Zartec <zartec@mccluster.eu>
  *
  *     This file is part of Spigot-Annotations.
  *
@@ -31,17 +31,17 @@ import java.lang.annotation.Target;
 
 /**
  * Represets a plugin dependency.
- * 
+ *
  * </p> If you want to use a dependency in your plugin apply it like this:
- * 
+ *
  * </p>
  * {@code @Plugin(name = "FooPlugin", version = "1.0.0-SNAPSHOT", dependencies =
  * { @Dependency(name = "BarPlugin") }))} </p>
  * {@code @Plugin(name = "FooPlugin", version = "1.0.0-SNAPSHOT", dependencies =
  * { @Dependency(name = "Bar1Plugin"), @Dependency(name = "Bar2Plugin") }))}
- * 
+ *
  * </p> Or with type:
- * 
+ *
  * </p>
  * {@code @Plugin(name = "FooPlugin", version = "1.0.0-SNAPSHOT", dependencies =
  * { @Dependency(name = "BarPlugin", type = DependencyType.SOFTDEPEND) }))}
@@ -52,7 +52,7 @@ public @interface Dependency {
 
     /**
      * The name of the plugin to depend on.
-     * 
+     *
      * @return The plugin name to depend on
      * @see <a href="http://wiki.bukkit.org/Plugin_YAML">Plugin_YAML</a>
      */
@@ -60,16 +60,16 @@ public @interface Dependency {
 
     /**
      * The type of the dependency.
-     * 
+     *
      * </p> A dependency with type {@link DependencyType#DEPEND} means that it
      * is required for the current plugin to load.
-     * 
+     *
      * </p> A dependency with type {@link DependencyType#SOFTDEPEND} means that
      * the current plugin needs it for fill functionality.
-     * 
+     *
      * </p> A dependency with type {@link DependencyType#LOADBEFORE} means that
      * the dependency needs your plugin to be loaded before it loads.
-     * 
+     *
      * @return The type of the dependency.
      * @see DependencyType
      * @see <a href="http://wiki.bukkit.org/Plugin_YAML">Plugin_YAML</a>

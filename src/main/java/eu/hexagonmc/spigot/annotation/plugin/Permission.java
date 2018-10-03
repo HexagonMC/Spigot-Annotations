@@ -1,7 +1,7 @@
 /**
  *
- * Copyright (C) 2017  HexagonMc <https://github.com/HexagonMC>
- * Copyright (C) 2017  Zartec <zartec@mccluster.eu>
+ * Copyright (C) 2017 - 2018  HexagonMc <https://github.com/HexagonMC>
+ * Copyright (C) 2017 - 2018  Zartec <zartec@mccluster.eu>
  *
  *     This file is part of Spigot-Annotations.
  *
@@ -37,28 +37,28 @@ public @interface Permission {
 
     /**
      * The name of this permission.
-     * 
+     *
      * @return the name
      */
     String name();
 
     /**
      * A short description for this permission node.
-     * 
+     *
      * @return the description
      */
     String description() default "";
 
     /**
      * The default value of this permission node.
-     * 
+     *
      * @return the default value
      */
     PermissionDefault def() default PermissionDefault.FALSE;
 
     /**
      * A list of child nodes.
-     * 
+     *
      * @return the child nodes
      * @see PermissionChild
      */

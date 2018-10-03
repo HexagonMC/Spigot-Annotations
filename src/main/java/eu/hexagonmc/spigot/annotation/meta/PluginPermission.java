@@ -1,7 +1,7 @@
 /**
  *
- * Copyright (C) 2017  HexagonMc <https://github.com/HexagonMC>
- * Copyright (C) 2017  Zartec <zartec@mccluster.eu>
+ * Copyright (C) 2017 - 2018  HexagonMc <https://github.com/HexagonMC>
+ * Copyright (C) 2017 - 2018  Zartec <zartec@mccluster.eu>
  *
  *     This file is part of Spigot-Annotations.
  *
@@ -38,7 +38,7 @@ public class PluginPermission {
     /**
      * Creates permission from an annotation. Parses the data stored in the
      * annotation.
-     * 
+     *
      * @param annotation The annotation to parse for data
      * @return The new permission
      * @see PluginPermission
@@ -76,7 +76,7 @@ public class PluginPermission {
 
     /**
      * Creates a new permission from a name.
-     * 
+     *
      * @param name The name of the permission
      */
     public PluginPermission(String name) {
@@ -85,7 +85,7 @@ public class PluginPermission {
 
     /**
      * Sets the name of this permission.
-     * 
+     *
      * @param name The name to set
      */
     public void setName(String name) {
@@ -96,7 +96,7 @@ public class PluginPermission {
 
     /**
      * The name of this permission.
-     * 
+     *
      * @return The name
      */
     public String getName() {
@@ -105,7 +105,7 @@ public class PluginPermission {
 
     /**
      * Sets the description of this permission.
-     * 
+     *
      * @param description The description to set
      */
     public void setDescription(String description) {
@@ -114,7 +114,7 @@ public class PluginPermission {
 
     /**
      * The description of this permission.
-     * 
+     *
      * @return The description
      */
     public String getDescription() {
@@ -123,7 +123,7 @@ public class PluginPermission {
 
     /**
      * Sets the default behavior of this permission.
-     * 
+     *
      * @param def The default behavior to set
      * @see PermissionDefault
      */
@@ -133,7 +133,7 @@ public class PluginPermission {
 
     /**
      * The default behavior of this permission.
-     * 
+     *
      * @return The default behavior
      * @see PermissionDefault
      */
@@ -143,7 +143,7 @@ public class PluginPermission {
 
     /**
      * Adds a child permission to this permission.
-     * 
+     *
      * @param node The node of the child
      * @param state The state of the child.
      */
@@ -156,7 +156,7 @@ public class PluginPermission {
 
     /**
      * Gets all child permissions.
-     * 
+     *
      * @return The child permissions
      */
     public Map<String, Boolean> getChilds() {
@@ -165,7 +165,7 @@ public class PluginPermission {
 
     /**
      * Removes child permission from this permission.
-     * 
+     *
      * @param node The node of the child to remove
      * @return true if the command was removed false if it did not exist
      */
@@ -231,9 +231,6 @@ public class PluginPermission {
         } else if (!_description.equals(other._description)) {
             return false;
         }
-        if (!_name.equals(other._name)) {
-            return false;
-        }
-        return true;
+        return _name.equals(other._name);
     }
 }

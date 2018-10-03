@@ -5,8 +5,8 @@ plugins {
     id 'maven-publish'
     id 'checkstyle'
     id 'jacoco'
-    id "com.github.hierynomus.license" version "0.13.1"
-    id "com.jfrog.bintray" version "1.7.3"
+    id "com.github.hierynomus.license" version "0.14.0"
+    id "com.jfrog.bintray" version "1.8.4"
 }
 
 archivesBaseName = project.name.toLowerCase()
@@ -29,7 +29,7 @@ repositories {
 dependencies {
     compile group: 'com.google.guava', name: 'guava', version: version_guava
     compile group: 'org.yaml', name: 'snakeyaml', version: version_snakeyaml
-    
+
     testCompile "junit:junit:${version_junit}"
     testCompile "com.google.testing.compile:compile-testing:${version_compiletesting}"
     testCompile "com.google.truth:truth:${version_truth}"
