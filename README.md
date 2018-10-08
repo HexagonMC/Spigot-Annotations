@@ -53,7 +53,7 @@ Add the dependency to your `build.gradle`.
 ```gradle
 ...
 dependencies {
-    compileOnly group: 'eu.hexagonmc', name: 'spigot-annotations', version: '1.1'
+    compileOnly group: 'eu.hexagonmc', name: 'spigot-annotations', version: '1.2'
 }
 ...
 ```
@@ -70,7 +70,7 @@ Add the dependency to your `pom.xml`.
         <dependency>
             <groupId>eu.hexagonmc</groupId>
             <artifactId>spigot-annotations</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
             <scope>provided</scope>
         </dependency>
         ...
@@ -106,7 +106,7 @@ Add the dependency to your `ivy.xml`.
     ...
     <dependencies>
         ...
-        <dependency org='eu.hexagonmc' name='spigot-annotations' rev='1.1'>
+        <dependency org='eu.hexagonmc' name='spigot-annotations' rev='1.2'>
             <artifact name='spigot-annotations' m:classifier='' ext='jar' />
         </dependency>
         ...
